@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate , Link} from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { isLogin, Login } from '../services/userLogin';
+import Spinner from '../components/ui/Spinner';
 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       await Login(email, password);
       if (isLogin) {
@@ -19,9 +23,15 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error(error);
+    }finally{
+        setLoading(false)
     }
   };
 
+// returning the spinner
+  if(loading){
+    return <Spinner/>
+  }
 
   return (
     <>

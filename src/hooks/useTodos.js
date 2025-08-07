@@ -1,32 +1,25 @@
 import { useState, useEffect } from 'react';
 import { TodoService } from '../services/todoService';
 
-//  hook now accepts the currently logged-in user's ID.
+//  accepting userId
 export function useTodos(userId) {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // We now pass the userId to the subscription service.
-    // This tells `TodoService` to only listen for changes to todos
-    // that belong to this specific user.
+    // passing user Id to todoservice
     const unsubscribe = TodoService.subscribeToTodos(userId, (newTodos) => {
       setTodos(newTodos);
       setLoading(false);
     });
 
     return () => unsubscribe();
-  //  We add `userId` to the dependency array.
-  // This ensures the effect (the real-time listener) is re-run
-  // whenever the `userId` changes (e.g., when a user logs in or out).
   }, [userId]);
 
   const addTodo = async (todoData) => {
     try {
       setError(null);
-      // The `addTodo` service now needs the userId.
-      // We'll pass the new todo data which should contain the userId.
       await TodoService.addTodo(todoData);
     } catch (err) {
       setError('Failed to add todo');

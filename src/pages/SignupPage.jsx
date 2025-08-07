@@ -4,28 +4,38 @@ import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth'; 
 import { auth } from '../lib/firebase'; 
 import { Button } from '../components/ui/Button';
+import Spinner from '../components/ui/Spinner';
 
 const SignupPage = () => {
     // useState to manage form input values
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const [loading, setLodaing] = useState(false);
     const navigate = useNavigate(); 
     // function to handle form submission
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevents the default form submission and page reload
-        setError(null); // Clear any previous errors
+        e.preventDefault(); 
+        setLodaing(true)
+        setError(null); 
 
         try {
-          // create user
+          // creating the user
             await createUserWithEmailAndPassword(auth, email, password);
             console.log("User signed up successfully!");
-            navigate('/'); // Redirect to the home page (or a dashboard) upon successful signup
+            navigate('/'); 
         } catch (err) {
             setError(err.message);
             console.error("Error signing up:", err.message);
+        }finally{
+          setLodaing(false)
         }
     };
+
+    // returning the spinner
+    if(loading){
+      return <Spinner/>
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
