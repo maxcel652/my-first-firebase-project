@@ -22,13 +22,6 @@ const LoginPage = () => {
     }
   };
 
-//   useEffect(() => {
-//     if(isLogin){
-//         navigate('/')
-//     }
-  
-//   }, [isLogin])
-  
 
   return (
     <>
