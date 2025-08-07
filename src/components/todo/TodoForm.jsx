@@ -5,7 +5,7 @@ import { Input } from '../ui/Input';
 import { Plus } from 'lucide-react';
 
 // MODIFICATION: The component now accepts `userId` as a prop.
-export function TodoForm({ onSubmit, disabled, userId }) {
+export function TodoForm({ onSubmit, disabled, userId, userName }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -19,7 +19,8 @@ export function TodoForm({ onSubmit, disabled, userId }) {
       description: description.trim(),
       completed: false,
       priority: 'medium',
-      userId: userId // <--- This is the key addition
+      userId: userId, // <--- This is the key addition
+      userName:userName
     });
 
     setTitle('');
@@ -28,6 +29,9 @@ export function TodoForm({ onSubmit, disabled, userId }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <p>
+        Hi {userName || 'there'}, organize your tasks here.
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           id="title"

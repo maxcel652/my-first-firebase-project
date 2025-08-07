@@ -53,10 +53,10 @@ function App() {
                 {/* Header */}
                 <header className="text-center mb-8">
                   <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                    Traitz Todo App
+                    <p>Welcome {user.displayName}</p>
                   </h1>
                   <p className="text-gray-600">
-                    Manage your tasks efficiently with Firebase & React 19
+                    Manage your tasks effeciently with Maxcel's Todo App.
                   </p>
                 </header>
 
@@ -75,7 +75,12 @@ function App() {
                         Add New Todo
                       </h2>
                       {/* MODIFICATION: Pass the current user's ID to the TodoForm */}
-                      <TodoForm onSubmit={addTodo} disabled={todosLoading} userId={user.uid} />
+                      <TodoForm onSubmit={addTodo}
+                      
+                      disabled={todosLoading} 
+                      
+                      userName={user.displayName}
+                      userId={user.uid} />
                     </div>
 
                     {/* Todo List */}

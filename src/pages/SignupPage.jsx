@@ -1,13 +1,14 @@
 
 import React, { useState } from 'react'; 
 import { useNavigate, Link } from 'react-router-dom'; 
-import { createUserWithEmailAndPassword } from 'firebase/auth'; 
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'; 
 import { auth } from '../lib/firebase'; 
 import { Button } from '../components/ui/Button';
 import Spinner from '../components/ui/Spinner';
 
 const SignupPage = () => {
     // useState to manage form input values
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -21,7 +22,13 @@ const SignupPage = () => {
 
         try {
           // creating the user
-            await createUserWithEmailAndPassword(auth, email, password);
+           const userCredentials =  await createUserWithEmailAndPassword(auth, email, password);
+           const user = userCredentials.user;
+
+           await updateProfile(user, {
+            displayName: name
+           });
+           
             console.log("User signed up successfully!");
             navigate('/'); 
         } catch (err) {
@@ -52,6 +59,8 @@ const SignupPage = () => {
                         id="name"
                         name="name"
                         type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
                         className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                         placeholder="Enter your name"
