@@ -6,12 +6,15 @@ import { auth } from '../lib/firebase';
 import { Button } from '../components/ui/Button';
 import Spinner from '../components/ui/Spinner';
 import toast from 'react-hot-toast';
+import { EyeOff, Eye } from 'lucide-react';
+
 
 const SignupPage = () => {
     // useState to manage form input values
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
     const [loading, setLodaing] = useState(false);
     const navigate = useNavigate(); 
@@ -86,14 +89,14 @@ const SignupPage = () => {
                           placeholder="Enter your email"
                         />
                     </div>
-                    <div>
+                    <div className=' relative'>
                         <label htmlFor="password" className="sr-only">
                           Password
                         </label>
                         <input
                           id="password"
                           name="password"
-                          type="password"
+                          type={showPassword? 'text' : 'password'}
                           autoComplete="new-password" 
                           required
                           // Binding input value to state and update on change
@@ -102,6 +105,13 @@ const SignupPage = () => {
                           className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                           placeholder="Enter your password"
                         />
+
+                        <button type='button' onClick={() => setShowPassword(!showPassword)}
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-500 cursor-pointer z-10"
+
+                          >
+                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        </button>
                     </div>
                     {/* Displaying an error message if Firebase returns one */}
                     {error && (

@@ -4,11 +4,13 @@ import { Button } from '../components/ui/Button';
 import { isLogin, Login } from '../services/userLogin';
 import Spinner from '../components/ui/Spinner';
 import toast from 'react-hot-toast';
+import { Eye, EyeOff } from 'lucide-react';
 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   
@@ -62,14 +64,14 @@ const LoginPage = () => {
               placeholder="Enter your email"
             />
           </div>
-          <div>
+          <div className=' relative'> 
             <label htmlFor="password" className="sr-only">
               Password
             </label>
             <input
               id="password"
               name="password"
-              type="password"
+              type={showPassword? 'text': 'password'}
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -77,6 +79,11 @@ const LoginPage = () => {
               className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
               placeholder="Enter your password"
             />
+            <button type='button' onClick={()=> setShowPassword(!showPassword)}
+                className=' absolute inset-y-0 leading-5 right-0 pr-3 cursor-pointer z-10'    
+            >
+                {showPassword ? <EyeOff/> : <Eye/>}
+            </button>
           </div>
 
 
