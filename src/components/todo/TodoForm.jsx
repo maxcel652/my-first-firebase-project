@@ -46,7 +46,7 @@ export function TodoForm({ onSubmit, disabled }) {
       <Button 
         type="submit" 
         disabled={disabled || !title.trim()}
-        className="w-full md:w-auto"
+        className="w-full md:w-auto bg-amber-950"
       >
         <Plus className="w-4 h-4 mr-2" />
         Add Todo
