@@ -6,7 +6,7 @@ import { Input } from '../ui/Input';
 import { Check, X, Edit2, Trash2, Save } from 'lucide-react';
 import { clsx } from 'clsx';
 
-export function TodoItem({ todo, onUpdate, onDelete, onToggle }) {
+export function TodoItem({ todo, onUpdate, onDelete, onToggle, creationDate }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
   const [editDescription, setEditDescription] = useState(todo.description || '');
@@ -61,11 +61,11 @@ export function TodoItem({ todo, onUpdate, onDelete, onToggle }) {
               />
               <div className="flex gap-2">
                 <Button size="sm" onClick={handleSave}>
-                  <Save className="w-3 h-3 mr-1" />
+                  <Save className="w-5 h-5 mr-1 bg-amber-600 cursor-pointer" />
                   Save
                 </Button>
                 <Button size="sm" variant="secondary" onClick={handleCancel}>
-                  <X className="w-3 h-3 mr-1" />
+                  <X className="w-3 h-3 mr-1 cursor-pointer" />
                   Cancel
                 </Button>
               </div>
@@ -107,6 +107,9 @@ export function TodoItem({ todo, onUpdate, onDelete, onToggle }) {
               </div>
             </>
           )}
+          <p className="text-xs text-gray-400 mt-1">
+            Created on: {creationDate}
+          </p>
         </div>
       </div>
     </div>

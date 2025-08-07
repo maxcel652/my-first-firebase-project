@@ -3,6 +3,18 @@ import React from 'react'
 import { TodoItem } from './TodoItem';
 
 export function TodoList({ todos, onUpdate, onDelete, onToggle }) {
+
+  // function to handle the time a todo was created
+
+  const todoCreationDate = (timespamp) =>{
+    if(!timespamp) return '';
+
+    const date = timespamp.toDate();
+
+    return date.toLocaleString();
+
+  }
+
   if (todos.length === 0) {
     return (
       <div className="text-center py-12">
@@ -26,6 +38,7 @@ export function TodoList({ todos, onUpdate, onDelete, onToggle }) {
           onUpdate={onUpdate}
           onDelete={onDelete}
           onToggle={onToggle}
+          creationDate= {todoCreationDate(todo.createdAt)}
         />
       ))}
     </div>
