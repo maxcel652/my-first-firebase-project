@@ -6,6 +6,9 @@ import Spinner from '../components/ui/Spinner';
 import { toast } from 'react-toastify';
 import { Eye, EyeOff } from 'lucide-react';
 
+import { auth } from '../lib/firebase';
+import { sendPasswordResetEmail } from 'firebase/auth';
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -33,6 +36,19 @@ const LoginPage = () => {
     }
   };
 
+
+//   function to reset users password
+const resetPassword = async () => {
+    const emailAddress = window.prompt("Please enter your email address.");
+    if(emailAddress){
+        try {
+            await sendPasswordResetEmail(auth, emailAddress);
+            toast.success(`The password reset link has been successfully sent to ${emailAddress}`)
+        } catch (error) {
+            toast.error("An error occurred. Check your email.")
+        }
+    }
+}
 // returning the spinner
   if(loading){
     return <Spinner/>
@@ -86,8 +102,17 @@ const LoginPage = () => {
             </button>
           </div>
 
-
-            <p>Do not have an account? create one <Link to='/signup' className=' text-xl text-gray-300'>here</Link></p>
+          <div className="flex items-center justify-end">
+            <button
+              type="button"
+              onClick={resetPassword}
+              className="text-sm font-medium text-amber-900 hover:text-amber-700"
+            >
+              Forgot password?
+            </button>
+          </div>
+            <p>Do not have an account? create one <Link to='/signup' className=' text-xl text-gray-300'>here</Link>
+            </p>
 
           <Button type="submit" className="w-full bg-amber-900">
             Login
