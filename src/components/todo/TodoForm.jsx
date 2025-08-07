@@ -27,10 +27,19 @@ export function TodoForm({ onSubmit, disabled, userId, userName }) {
     setDescription('');
   };
 
+  // getting the user's first name
+
+  const getFirstName = (fullname) =>{
+    if(!fullname) return 'there';
+
+    const firstName = fullname.split(' ');
+    return firstName[0];
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <p>
-        Hi {userName || 'there'}, organize your tasks here.
+        Hi {getFirstName(userName)}, organize your tasks here.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
