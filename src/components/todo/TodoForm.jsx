@@ -1,11 +1,11 @@
-import React from 'react'
-
+import React from 'react';
 import { useState } from 'react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Plus } from 'lucide-react';
 
-export function TodoForm({ onSubmit, disabled }) {
+// MODIFICATION: The component now accepts `userId` as a prop.
+export function TodoForm({ onSubmit, disabled, userId }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -13,11 +13,13 @@ export function TodoForm({ onSubmit, disabled }) {
     e.preventDefault();
     if (!title.trim()) return;
 
+    // MODIFICATION: The `userId` is now included in the data object.
     onSubmit({
       title: title.trim(),
       description: description.trim(),
       completed: false,
-      priority: 'medium'
+      priority: 'medium',
+      userId: userId // <--- This is the key addition
     });
 
     setTitle('');

@@ -6,6 +6,7 @@ import {
   updateDoc,
   deleteDoc,
   query,
+  where, // <-- New: We need this to filter by user ID
   orderBy,
   onSnapshot,
   serverTimestamp
@@ -15,10 +16,21 @@ import { db } from '../lib/firebase';
 const COLLECTION_NAME = 'todos';
 
 export class TodoService {
-  // Get all todos with real-time updates
-  static subscribeToTodos(callback) {
+  // MODIFICATION: This method now accepts the user's ID to filter the todos.
+  static subscribeToTodos(userId, callback) {
+    // FIX: We check if `userId` is valid. If not, we return an empty array
+    // and a no-op function to prevent a database query error.
+    if (!userId) {
+      callback([]);
+      return () => {};
+    }
+
+    //  We add a `where` clause to the query.
+    // This tells Firestore to only fetch documents where the 'userId' field
+    // is equal to the `userId` of the currently logged-in user.
     const q = query(
       collection(db, COLLECTION_NAME),
+      where('userId', '==', userId),
       orderBy('createdAt', 'desc')
     );
     
@@ -31,7 +43,8 @@ export class TodoService {
     });
   }
 
-  // Add new todo
+  // This method is now structured to accept a complete `todoData` object,
+  // which is expected to already contain the `userId`.
   static async addTodo(todoData) {
     try {
       const docRef = await addDoc(collection(db, COLLECTION_NAME), {
@@ -46,7 +59,8 @@ export class TodoService {
     }
   }
 
-  // Update todo
+  // The rest of the methods are correct as they work on a single document ID.
+
   static async updateTodo(id, updates) {
     try {
       const todoRef = doc(db, COLLECTION_NAME, id);
@@ -60,7 +74,6 @@ export class TodoService {
     }
   }
 
-  // Delete todo
   static async deleteTodo(id) {
     try {
       await deleteDoc(doc(db, COLLECTION_NAME, id));
@@ -70,7 +83,6 @@ export class TodoService {
     }
   }
 
-  // Toggle todo completion
   static async toggleTodo(id, completed) {
     return this.updateTodo(id, { completed });
   }

@@ -74,7 +74,8 @@ function App() {
                       <h2 className="text-xl font-semibold text-gray-900 mb-4">
                         Add New Todo
                       </h2>
-                      <TodoForm onSubmit={addTodo} disabled={todosLoading} />
+                      {/* MODIFICATION: Pass the current user's ID to the TodoForm */}
+                      <TodoForm onSubmit={addTodo} disabled={todosLoading} userId={user.uid} />
                     </div>
 
                     {/* Todo List */}
