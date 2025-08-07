@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../lib/firebase'; 
 import { Button } from '../components/ui/Button';
 import Spinner from '../components/ui/Spinner';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import { EyeOff, Eye } from 'lucide-react';
 
 

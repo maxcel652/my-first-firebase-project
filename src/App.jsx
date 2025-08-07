@@ -10,8 +10,8 @@ import { Logout } from './services/userLogin';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from './components/ui/Button';
 import SignupPage from './pages/SignupPage';
-import toast, { Toaster } from 'react-hot-toast';
-
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const { user, loading: authLoading } = useAuth(); 
   const {
@@ -46,13 +46,7 @@ function App() {
 
   return (
     <>
-        <Toaster 
-        position="top-right" // You can customize the position here
-        toastOptions={{
-          success: { style: { background: 'green', color: 'white' } },
-          error: { style: { background: 'red', color: 'white' } },
-        }}
-      />
+      <ToastContainer position='top-right'/>
 
     <Routes>
       <Route

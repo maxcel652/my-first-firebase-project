@@ -3,7 +3,7 @@ import { useNavigate , Link} from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { isLogin, Login } from '../services/userLogin';
 import Spinner from '../components/ui/Spinner';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import { Eye, EyeOff } from 'lucide-react';
 
 
@@ -21,7 +21,7 @@ const LoginPage = () => {
     try {
       await Login(email, password);
       if (isLogin) {
-        toast.success('Login successful')
+        toast.success('Welcome')
         navigate('/');
         console.log('Redirecting to the Todo page');
       }
