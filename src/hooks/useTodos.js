@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TodoService } from '../services/todoService';
+import toast from 'react-hot-toast';
 
 //  accepting userId
 export function useTodos(userId) {
@@ -21,6 +22,7 @@ export function useTodos(userId) {
     try {
       setError(null);
       await TodoService.addTodo(todoData);
+      toast.success("Todo added")
     } catch (err) {
       setError('Failed to add todo');
       console.error(err);
@@ -31,6 +33,7 @@ export function useTodos(userId) {
     try {
       setError(null);
       await TodoService.updateTodo(id, updates);
+      toast.success('Todo updated');
     } catch (err) {
       setError('Failed to update todo');
       console.error(err);
@@ -41,6 +44,7 @@ export function useTodos(userId) {
     try {
       setError(null);
       await TodoService.deleteTodo(id);
+      toast.success('Todo deleted')
     } catch (err) {
       setError('Failed to delete todo');
       console.error(err);

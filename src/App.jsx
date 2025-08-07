@@ -10,6 +10,7 @@ import { Logout } from './services/userLogin';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from './components/ui/Button';
 import SignupPage from './pages/SignupPage';
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
   const { user, loading: authLoading } = useAuth(); 
@@ -39,10 +40,20 @@ function App() {
 
   const handleLogout = async () => {
     await Logout();
+    toast.success('Logout successful')
     navigate('/login');
   };
 
   return (
+    <>
+        <Toaster 
+        position="top-right" // You can customize the position here
+        toastOptions={{
+          success: { style: { background: 'green', color: 'white' } },
+          error: { style: { background: 'red', color: 'white' } },
+        }}
+      />
+
     <Routes>
       <Route
         path="/"
@@ -114,9 +125,13 @@ function App() {
           )
         }
       />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path='/signup' element={<SignupPage/>} />
+     
+
+        <Route className=' max-w-4xl mx-auto px-4 py-8' path="/login" element={<LoginPage />} />
+
+        <Route className=' max-w-4xl mx-auto px-4 py-8' path='/signup' element={<SignupPage/>} />
     </Routes>
+    </>
   );
 }
 

@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../lib/firebase'; 
 import { Button } from '../components/ui/Button';
 import Spinner from '../components/ui/Spinner';
+import toast from 'react-hot-toast';
 
 const SignupPage = () => {
     // useState to manage form input values
@@ -28,12 +29,14 @@ const SignupPage = () => {
            await updateProfile(user, {
             displayName: name
            });
-           
+
             console.log("User signed up successfully!");
+            toast.success("Account registered successuflly")
             navigate('/'); 
         } catch (err) {
             setError(err.message);
             console.error("Error signing up:", err.message);
+            toast.error("An error occured", err.message)
         }finally{
           setLodaing(false)
         }
@@ -45,7 +48,7 @@ const SignupPage = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 max-w-4xl mx-auto px-4 py-8">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
                 <h2 className="text-center text-3xl font-bold text-gray-900">
                   Create an account

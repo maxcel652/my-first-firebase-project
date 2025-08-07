@@ -3,6 +3,7 @@ import { useNavigate , Link} from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { isLogin, Login } from '../services/userLogin';
 import Spinner from '../components/ui/Spinner';
+import toast from 'react-hot-toast';
 
 
 const LoginPage = () => {
@@ -18,11 +19,13 @@ const LoginPage = () => {
     try {
       await Login(email, password);
       if (isLogin) {
+        toast.success('Login successful')
         navigate('/');
         console.log('Redirecting to the Todo page');
       }
     } catch (error) {
       console.error(error);
+      toast.error('Failed to login, please check your credentials.')
     }finally{
         setLoading(false)
     }
@@ -37,7 +40,7 @@ const LoginPage = () => {
     <>
     {isLogin && (
 
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 max-w-4xl mx-auto px-4 py-8">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
         <h2 className="text-center text-3xl font-bold text-gray-900">
           Log in to your account
