@@ -37,7 +37,7 @@ const LoginPage = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
         <h2 className="text-center text-3xl font-bold text-gray-900">
-          Sign in to your account
+          Log in to your account
         </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
@@ -74,7 +74,7 @@ const LoginPage = () => {
           </div>
 
 
-            <p>Do not have an account? create one <Link to='/signup'>here</Link></p>
+            <p>Do not have an account? create one <Link to='/signup' className=' text-xl text-gray-300'>here</Link></p>
 
           <Button type="submit" className="w-full bg-amber-900">
             Login

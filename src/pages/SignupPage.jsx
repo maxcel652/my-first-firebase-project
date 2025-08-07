@@ -1,12 +1,13 @@
 import React from 'react'
 import { Button } from '../components/ui/Button'
+import { Link } from 'react-router-dom'
 
 const SignupPage= () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
             <h2 className="text-center text-3xl font-bold text-gray-900">
-              Sign in to your account
+              Create an account
             </h2>
             <form className="space-y-4">
                 <div>
@@ -51,6 +52,8 @@ const SignupPage= () => {
                   placeholder="Enter your password"
                 />
               </div>
+              <p>Have an account? <Link to='/login' className=' text-xl text-gray-300'>Login</Link></p>
+
               <Button type="submit" className="w-full bg-amber-900">
                 Sign Up
               </Button>
