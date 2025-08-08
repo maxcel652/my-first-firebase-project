@@ -2,7 +2,7 @@ import React from 'react'
 
 import { TodoItem } from './TodoItem';
 
-export function TodoList({ todos, onUpdate, onDelete, onToggle }) {
+export function TodoList({todos, currentView, onUpdate, onDelete, onToggle, onRestore, onDeletePermanently }) {
 
   // function to handle the time a todo was created
 
@@ -15,6 +15,19 @@ export function TodoList({ todos, onUpdate, onDelete, onToggle }) {
 
   }
 
+  const noTodosMessage = () => {
+    switch (currentView) {
+      case 'todos':
+        return 'Add your first todo to get started!';
+      case 'completed':
+        return 'You have no completed todos yet.';
+      case 'trash':
+        return 'Your trash is empty!';
+      default:
+        return 'No todos found.';
+    }
+  };
+
   if (todos.length === 0) {
     return (
       <div className="text-center py-12">
@@ -23,8 +36,10 @@ export function TodoList({ todos, onUpdate, onDelete, onToggle }) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No todos yet</h3>
-        <p className="text-gray-500">Add your first todo to get started!</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">No todos found</h3>
+        <p className="text-gray-500">
+        {noTodosMessage()}
+        </p>
       </div>
     );
   }
@@ -38,7 +53,10 @@ export function TodoList({ todos, onUpdate, onDelete, onToggle }) {
           onUpdate={onUpdate}
           onDelete={onDelete}
           onToggle={onToggle}
-          creationDate= {todoCreationDate(todo.createdAt)}
+          onRestore={onRestore}
+          onDeletePermanently={onDeletePermanently}
+          creationDate={todoCreationDate(todo.createdAt)}
+          currentView={currentView}
         />
       ))}
     </div>

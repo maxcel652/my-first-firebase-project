@@ -12,15 +12,33 @@ import { Button } from './components/ui/Button';
 import SignupPage from './pages/SignupPage';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import { ListTodo, TrashIcon, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+
+// views for fetching either completed, active or trashed todos
+
+const VIEWS  = {
+  TODOS: 'todos',
+  COMPLETED: 'completed',
+  TRASH: 'trash',
+}
+
+
 function App() {
   const { user, loading: authLoading } = useAuth(); 
+  const [currentView, setCurrentView] = useState(VIEWS.TODOS);
   const {
+    activeTodos,
+    completedTodos,
+    trashedTodos,
     todos,
     loading: todosLoading,
     error,
     addTodo,
     updateTodo,
     deleteTodo,
+    restoreTodo,
+    deleteTodoPermanently,
     toggleTodo,
   } = useTodos(user?.uid); 
 
@@ -44,6 +62,48 @@ function App() {
     navigate('/login');
   };
 
+    // switch between the current view to display a particular set of todos
+  const getTodosForView = ()=>{
+    switch (currentView) {
+      case VIEWS.TODOS:
+        return activeTodos;
+      case VIEWS.COMPLETED:
+        return completedTodos;
+      case VIEWS.TRASH:
+        return trashedTodos;
+    
+      default:
+        activeTodos
+    }
+  }
+  // handle todo list display
+  const getTodoList = ()=>{
+    switch (currentView) {
+      case VIEWS.TODOS:
+        return {
+          onUpdate: updateTodo,
+          onDelete: deleteTodo,
+          onToggle: toggleTodo,
+          onRestore: restoreTodo,
+          onDeletePermanently: deleteTodoPermanently,
+        };
+      case VIEWS.COMPLETED:
+        return{
+          onDelete: deleteTodo,
+          onToggle:toggleTodo,
+        };
+      case VIEWS.TRASH:
+        return {
+          onRestore: restoreTodo,
+          onDeletePermanently: deleteTodoPermanently,
+          onUpdate: updateTodo, // Required for the TodoItem component
+          onDelete: deleteTodo,
+        };
+    
+      default:
+        return {};
+    }
+  }
   return (
     <>
       <ToastContainer position='top-right'/>
@@ -52,7 +112,7 @@ function App() {
       <Route
         path="/"
         element={
-          user ? ( // Now check the user object directly
+          user ? ( 
             <div className="min-h-screen bg-gray-50">
               <div className="max-w-4xl mx-auto px-4 py-8">
                 {/* Header */}
@@ -63,6 +123,33 @@ function App() {
                   <p className="text-gray-600">
                     Manage your tasks effeciently with Maxcel's Todo App.
                   </p>
+
+                  <div className=' flex justify-center mt-4 space-x-4'>
+                    <Button 
+                    onClick={()=> setCurrentView(VIEWS.TODOS)}
+                    variant={currentView ===VIEWS.TODOS ? 'solid' :'ghost'}
+                    className={`font-semibold ${currentView===VIEWS.TODOS? 'bg-amber-900 text-white': 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                    >
+                      <ListTodo className=' w-4 h-4 mr-2'/>My Todos
+                    </Button>
+
+                    <Button
+                        onClick={() => setCurrentView(VIEWS.COMPLETED)}
+                        variant={currentView === VIEWS.COMPLETED ? 'solid' : 'ghost'}
+                        className={`font-semibold ${currentView === VIEWS.COMPLETED ? 'bg-amber-900 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                      >
+                        <CheckCircle2 className='w-4 h-4 mr-2' /> Completed
+                      </Button>
+
+                    <Button
+                    onClick={()=> setCurrentView(VIEWS.TRASH)}
+                    variant={currentView === VIEWS.TRASH ? 'solid': 'ghost'}
+                    className={`font-semibold ${currentView === VIEWS.TRASH ? 'bg-amber-900 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+
+                    >
+                      <TrashIcon className=' w-4 h-4 mr-2'/> Trash
+                    </Button>
+                  </div>
                 </header>
 
                 {/* Error Display */}
@@ -74,7 +161,7 @@ function App() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2 space-y-6">
-                    {/* Add Todo Form */}
+                    {currentView === VIEWS.TODOS && (
                     <div className="bg-white rounded-lg border shadow-sm p-6">
                       <h2 className="text-xl font-semibold text-gray-900 mb-4">
                         Add New Todo
@@ -87,25 +174,28 @@ function App() {
                       userName={user.displayName}
                       userId={user.uid} />
                     </div>
+                    )}
 
                     {/* Todo List */}
                     <div className="bg-white rounded-lg border shadow-sm p-6">
                       <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                        Your Todos ({todos.length})
+                      {currentView === VIEWS.TODOS ? 'Your Todos' : (currentView === VIEWS.COMPLETED ? 'Completed Todos' : 'Trash')} ({getTodosForView().length})
                       </h2>
                       <TodoList
-                        todos={todos}
-                        onUpdate={updateTodo}
-                        onDelete={deleteTodo}
-                        onToggle={toggleTodo}
+                        todos={getTodosForView()}
+                        currentView={currentView} 
+                        {...getTodoList()}
                       />
                     </div>
                   </div>
 
                   {/* Sidebar */}
                   <div className="space-y-6">
-                    <TodoStats todos={todos} />
-                    <Button className='bg-amber-950'
+                  <TodoStats 
+                      activeTodos={activeTodos}
+                      completedTodos={completedTodos}
+                      trashedTodos={trashedTodos} />
+                  <Button className='bg-amber-950'
                       onClick={handleLogout}
                     >
                       Logout
